@@ -1,0 +1,29 @@
+1. git init  -> to initialize local repo. on pc
+2. git remote add origin 'url' -> to connect local and online git reposatory
+3. git branch M main -> to make local folder usable from commandline and to make it main folder for online reposatory 
+4. pwd -> (print working directory) to know which directory we are in 
+5. git branch -> to check if the branches are working 
+6. git rebase --continue  -> after fixed an error to restart the process
+7. git rebase --abort -> to abort all the running processes
+8. git checkout --theirs .gitignore -> to solve the conflic which are not solving on the local system (get solution from github)
+9. git add .gitignore -> to ignore trackign on specific file
+10. git commit --amend --no-edit  -> update last commit but dosent change the message
+11. git commit --amend -m "message" -> update last commit and add a message
+12. git status -> tells currentstatus of git
+13. git diff -> tell changes 
+14. git push origin main -> it pushes code on github
+15. git push origin main --force -> it pushes code on github (compulsory command)
+16. git pull origin main --rebase -> bring s github files in local
+17. git add . -> add file to local folder
+18. git commit -m -> confim changes before pushing
+19. git push -> uploading changes to github
+20. 
+
+
+
+basic commandline COMMANDS:
+. print command -> echo
+. to change the directory -> cd 
+. to see the list of files in current folder -> ls
+. to move backwards in directory -> cd .. , cd /
+. to open text files in the directory -> cat 'filename.txt'

@@ -1,0 +1,156 @@
+ok here are key points as i learn :
+
+1. SYNTAX -
+    . Indentations : are needed when you want to change the block of code. Indentations refer to the block of codes.
+    
+    . Variables : used to refer to a value or assing a value
+    
+    . # : used to make comments ( anything after # is comment in that line)
+    
+    . statement : it is refered to instructions, in python we do not need ";" to end one line we can just finish it by switching the line 
+
+2. OUTPUT - 
+    . the print() is used to disply text and numbers
+        -text : print("text here")     "" or'' are used to display text with print statement 
+        -number : no inverted comas are required when numbers are printing
+        -end=" " : it is used so that when we add another print statement it display text in same line as before because by default print() changes line by itself for the next print statement.
+                    syntax: print("text here", end=" ")
+        -Mix text and numbers : syntax ("text here", num, "text again") no limit
+
+3. COMMENTS - 
+    . # for single line comments
+    
+    . ''' comment here ''' for multiline comment
+
+4. VARIABLES - 
+    . there is no command to declare variable so the variables are declared when values are assigned to them
+
+    . casting : when you want to speciy the data type of a variable.
+    
+                eg- a = str(3) # 3 is a string in a variable
+    . type() : to get the data type of the variable 
+                eg- print(type(a)) # it will be string as above example 
+    
+    . ' ' or " " : used to declare string variable
+    
+    . Case Sensitive : a and A are 2 diffrent variable not affecting each other values
+    
+    . Variable names:
+        start with a letter or the underscore character
+        cannot start with a number
+        only contain (A-z, 0-9, and _ )
+        case-sensitive (age, Age and AGE are three different variables)
+        cannot be any of the Python keywords.
+    
+    . Assign Multiple Values :
+        - many value to many variables:
+            eg: x, y, z = "orange", 34, "black"
+        - One value to many variable:
+            eg: x, y, z = "orange"
+        -unpack a collection (list or tuple)
+            eg: lst = [1,2,3]
+                x,y,z = lst   # values assigned respectively
+    
+    . Output Variables : ( print(variable) )
+        - print(var1, var2, var3) # it prints the values of multiple variables regular in same line divided by space
+        - math operations : print(x+y)
+            - if both are string or both are numbers it will add but if one is number and other is string they wont add
+    
+    . Gloabal Variables : variables outside the functions
+        - to create a global variable inside a function we need to use "global" keyword 
+        eg: def myfunc():
+                global x
+                x = "fantastic"
+    
+5. DATA TYPES -
+    .list of python in Built data types :
+        Text Type:	    str
+        Numeric Types:	int, float, complex
+        Sequence Types:	list, tuple, range
+        Mapping Type:	dict
+        Set Types:	    set, frozenset
+        Boolean Type:	bool
+        Binary Types:	bytes, bytearray, memoryview
+        None Type:	    NoneType
+
+    . type() function tells us about the what doata type does a perticular variable store
+   
+    . if want to specify data type : x = str(54)  # will be saved as string data type
+    
+6. NUMBERS - 
+    . there are 3 types : int(1), float(22.3), complex(12j)
+
+    .int : 
+        - whole, +ve, -ve numbers without decimals
+        - unlimited
+    
+    .float : 
+        - +ve and -ve numbers with decimals
+        - can be scientific number too with use of "e" to indicate powers of 10
+
+    .complex : 
+        - written with 'j' , representing there imaginary part 
+
+    . Type Conversion : 
+        - can convert using int(), float(), complex()
+        - complex numbers cant be converted to any other number types
+            eg: a= 23 #int  
+                x= float(a)  # int converted into float
+    
+    . Random number : python doest have direct in built function but have a inbuilt module (random) which helps in generating random numbers
+                      to generate this we import random module and then use random. functions 
+                        eg - random.randrange(1,10)
+
+    7. STRINGS - 
+        - can be written in ' ' or " "
+        - displayed using print()
+        - quotes can be used inside other quotes if they do not match the quotes srrounding the string
+        - string assigned to variables.
+        - multiline string can be written using 3 inverted commas each side of the text ('''  ''' or """  """) 
+        
+        *- STRING IS A ARRAY : 
+            - python dosent have the char data type so if there is a single character present then its just a string with a length 1.
+            - since it is array we can access the character at positions using the square brackets
+                eg. a = "hello"
+                    print(a[1])  #output will be 'e' since the first position is considered 0
+            
+        *- Looping through string: since strings are arrays we can loop through characters in a string. (for loop)
+            eg: for x in "banana";
+                    print(x)
+
+        - len() : len function returns the length of the string 
+        
+        *- in : -to check if a certain char or phrase is present in perticular string
+            eg: txt = "hi my name is bhavik"
+                print("name" in txt )
+            - can be used with if statement as well
+                eg: if "name" in txt;
+                        print("yes")
+        *- not in : to check if a certain char or phrase is not present in perticular string 
+                 
+        *- slicing : helps to return a range of characters in the string 
+                eg: 
+                b = "Hello, World"
+                print(b[2:5]) # out - llo
+                print(b[:5]) # out - Hello // as there is no initial value so it consider it as starting of string
+                print(b[2:]) # out - llo, World // as here end is not given so default is string end
+                print(b[-5:-2]) # orl //negative indexing 
+
+        *- built in String modification methods 
+            - upper() # uppercase all characters
+              lower() #lowercase all characters
+              strip() # removes whitespaces from the string 
+              replace() #replcae a string with another string eg. a.replace("h", "j") = replace all the h in string with j 
+              split()  #a list where the text between the specified separator becomes the list items
+
+              EX: x.upper() # dot operator is used
+        
+        - you can add 2 diffrent strings and store in new variable
+
+        *- format() method : used to add a diffrent data type with string like strin and number (int)
+            - f functiion is used => f in front of the string literal, and add curly brackets {} as placeholders for variables and other operations.
+                eg: price = 59
+                    txt = f"The price is {price} dollars"
+                    print(txt)
+
+        

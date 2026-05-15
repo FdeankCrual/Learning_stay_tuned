@@ -153,4 +153,9 @@ ok here are key points as i learn :
                     txt = f"The price is {price} dollars"
                     print(txt)
 
-        
+    8. Python boolean 
+    9. Python operators
+    10.List is a collection which is ordered and changeable. Allows duplicate members.
+      .Tuple is a collection which is ordered and unchangeable. Allows duplicate members.
+      .Set is a collection which is unordered, unchangeable*, and unindexed. No duplicate members.
+      .Dictionary is a collection which is ordered** and changeable. No duplicate members.

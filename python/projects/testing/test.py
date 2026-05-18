@@ -23,7 +23,7 @@ def board(screen):
             pygame.draw.rect(screen, color, rect) # final step to add color to specific box position/area on screen
 
 class GameState():  
-  def __init__(self):
+    def __init__(self):
         self.board=[
             ['bR','bN','bB','bQ','bK','bB','bN','bR'],
             ['bP','bP','bP','bP','bP','bP','bP','bP'],
@@ -35,6 +35,32 @@ class GameState():
             ['wR','wN','wB','wQ','wK','wB','wN','wR']]
         self.white_to_move=True
         self.move_log=[]
+    
+    def make_move(self,move):
+        self.board[move.start_row][move.start_col]='--'
+        self.board[move.end_row][move.end_col]=move.piece_to_move
+        self.move_log.append(move)
+        self.white_to_move = not self.white_to_move
+
+    def get_rook_moves(self, row, col, moves):
+        self.moves=list()
+        for i in range(8):
+            moves.append([row,i])
+        for j in range(8):
+            moves.append([j,col])
+        rook_moves=Move()
+
+
+class Move():
+    def __init__(self, start_sq,end_sq, board):
+        self.start_row=start_sq[0]
+        self.start_col=start_sq[1]
+        self.end_row=end_sq[0]
+        self.end_col=end_sq[1]
+        self.piece_to_move=board[self.start_row][self.start_col]
+        self.piece_captured=board[self.end_row][self.end_col]
+        
+
 
 def load_images():
     pieces=['bR','bN','bB','bQ','bK','bP','wR','wN','wB','wQ','wK','wP']
@@ -50,9 +76,6 @@ def draw_pieces(screen, gs):
             if piece != '--':
                 img=IMAGES[piece]
                 screen.blit(img,(col*block_size,row*block_size))
-
-    
-
 
 
 
@@ -75,6 +98,7 @@ def main():
                 location = pygame.mouse.get_pos()
                 x= location[1]//block_size
                 y= location[0]//block_size
+
                 if sq_selected==(x,y):
                     player_clicked=[]
                     sq_selected=()
@@ -84,19 +108,11 @@ def main():
                     if len(player_clicked)==1:
                         sq_selected=()
                     elif len(player_clicked)==2:
-                        start_row= player_clicked[0][0]
-                        start_col= player_clicked[0][1]
-                        end_row= player_clicked[1][0]
-                        end_col= player_clicked[1][1]
-                        if gs.board[start_row][start_col]=='--':
-                            player_clicked=[]
-                            sq_selected=()
-                        else:
-                            piece_to_move=gs.board[start_row][start_col]
-                            gs.board[start_row][start_col] = '--'
-                            gs.board[end_row][end_col]=piece_to_move
-                            player_clicked=[]
-                            sq_selected=()
+                        move = Move(player_clicked[0], player_clicked[1], gs.board)
+                        if move.piece_to_move != '--':
+                            gs.make_move(move)
+                        player_clicked=[]
+                        sq_selected=()
 
         board(screen) # call the board function to create those boxes on screen so it looks like chess board
         draw_pieces(screen, gs.board)

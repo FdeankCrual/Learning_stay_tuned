@@ -8,7 +8,7 @@ rows = 8
 block_size = w//columns # to get len of each lise of the boxes
 LIGHT_BROWN = (240, 217, 181)
 DARK_BROWN = (181, 136, 99)
-IMAGES={}
+IMAGES={} # all images of the peices are stored here
 
 # function to create the chess board 
 def board(screen):
@@ -23,7 +23,7 @@ def board(screen):
             pygame.draw.rect(screen, color, rect) # final step to add color to specific box position/area on screen
 
 class GameState():  
-  def __init__(self):
+    def __init__(self):
         self.board=[
             ['bR','bN','bB','bQ','bK','bB','bN','bR'],
             ['bP','bP','bP','bP','bP','bP','bP','bP'],
@@ -35,6 +35,24 @@ class GameState():
             ['wR','wN','wB','wQ','wK','wB','wN','wR']]
         self.white_to_move=True
         self.move_log=[]
+    
+    def make_move(self,move):
+        self.board[move.start_row][move.start_col]='--'
+        self.board[move.end_row][move.end_col]=move.piece_to_move
+        self.move_log.append(move)
+        self.white_to_move = not self.white_to_move
+
+
+class Move():
+    def __init__(self, start_sq,end_sq, board):
+        self.start_row=start_sq[0]
+        self.start_col=start_sq[1]
+        self.end_row=end_sq[0]
+        self.end_col=end_sq[1]
+        self.piece_to_move=board[self.start_row][self.start_col]
+        self.piece_captured=board[self.end_row][self.end_col]
+        
+
 
 def load_images():
     pieces=['bR','bN','bB','bQ','bK','bP','wR','wN','wB','wQ','wK','wP']
@@ -50,7 +68,7 @@ def draw_pieces(screen, gs):
             if piece != '--':
                 img=IMAGES[piece]
                 screen.blit(img,(col*block_size,row*block_size))
-                
+
 
 
 def main(): 
@@ -60,10 +78,34 @@ def main():
     run=True
     load_images()
     gs = GameState()
+
+    #temp. data types to move the peice
+    sq_selected=() # tuple to keep track of last selected sq
+    player_clicked=[] # keep track of 2 co-oordinates where the peice is and where it wants it to go
     while run: # used to create events and interact with the board 
         for event in pygame.event.get(): # this one is used to create a exit point so we can exit from the infinite loop of events 
             if event.type == pygame.QUIT:
                 run=False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                location = pygame.mouse.get_pos()
+                x= location[1]//block_size
+                y= location[0]//block_size
+
+                if sq_selected==(x,y):
+                    player_clicked=[]
+                    sq_selected=()
+                else:
+                    sq_selected = (x,y)
+                    player_clicked.append(sq_selected)
+                    if len(player_clicked)==1:
+                        sq_selected=()
+                    elif len(player_clicked)==2:
+                        move = Move(player_clicked[0], player_clicked[1], gs.board)
+                        if move.piece_to_move != '--':
+                            gs.make_move(move)
+                        player_clicked=[]
+                        sq_selected=()
+
         board(screen) # call the board function to create those boxes on screen so it looks like chess board
         draw_pieces(screen, gs.board)
         pygame.display.flip() # to update the whole screen so the chess board shows up else the the board will not have the boxes without update

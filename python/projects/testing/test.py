@@ -42,13 +42,87 @@ class GameState():
         self.move_log.append(move)
         self.white_to_move = not self.white_to_move
 
+    
+    def get_all_possible_moves(self):
+        moves=[]
+        for r in range(8):
+            for c in range(8):
+                peice=self.board[r][c]
+                if peice!='--':
+                    color= peice[0]
+                    peice_type=peice[1]
+
+                    if((color=="w" and self.white_to_move) or (color=="b" and not self.white_to_move)):
+                        if peice_type=='R':
+                            self.get_rook_moves(r,c,moves)
+            
+
+        return moves
+    
+    def get_pawn_moves(self, row, col, moves):
+        y=self.board[row][col]
+        if y[0]=='b':
+            if y == self.board[][]
+            if row == 2:
+                for i in range(1,4,1):
+                    if self.board[i][col]!= '--':
+                        break
+                    else: 
+                        moves.append(Move((row,col),(i,col),self.board))
+            if row != 2:
+                if self.board[row+1][col]== '--':
+                    moves.append(Move((row,col),(row+1,col),self.board))
+            if 
+
+        elif y[0]=='w':
+            
+            
+
+
     def get_rook_moves(self, row, col, moves):
-        self.moves=list()
-        for i in range(8):
-            moves.append([row,i])
-        for j in range(8):
-            moves.append([j,col])
-        rook_moves=Move()
+        
+        y=self.board[row][col]
+        for i in range(col+1, 8, 1):
+            x=self.board[row][i]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(row,i),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(row,i),self.board))
+
+        for i in range(col-1, -1, -1):
+            x=self.board[row][i]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(row,i),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(row,i),self.board))
+
+        for i in range(row+1, 8, 1):
+            x=self.board[i][col]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(i,col),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(i,col),self.board))
+            
+            
+        for i in range(row-1, -1, -1):
+
+            x=self.board[i][col]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(i,col),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(i,col),self.board))
 
 
 class Move():
@@ -59,6 +133,14 @@ class Move():
         self.end_col=end_sq[1]
         self.piece_to_move=board[self.start_row][self.start_col]
         self.piece_captured=board[self.end_row][self.end_col]
+
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return (self.start_row == other.start_row and 
+                    self.start_col == other.start_col and 
+                    self.end_row == other.end_row and 
+                    self.end_col == other.end_col)
+        return False
         
 
 
@@ -109,7 +191,8 @@ def main():
                         sq_selected=()
                     elif len(player_clicked)==2:
                         move = Move(player_clicked[0], player_clicked[1], gs.board)
-                        if move.piece_to_move != '--':
+                        valid_moves= gs.get_all_possible_moves()
+                        if move in valid_moves:                      
                             gs.make_move(move)
                         player_clicked=[]
                         sq_selected=()

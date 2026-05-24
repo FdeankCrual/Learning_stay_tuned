@@ -26,10 +26,10 @@ class GameState():
     def __init__(self):
         self.board=[
             ['bR','bN','bB','bQ','bK','bB','bN','bR'],
-            ['bP','bP','bP','bP','bP','bP','bP','bP'],
+            ['bP','--','bP','bP','bP','bP','bP','bP'],
             ['--','--','--','--','--','--','--','--'],
             ['--','--','--','--','--','--','--','--'],
-            ['--','--','--','--','--','--','--','--'],
+            ['--','bP','--','--','--','--','--','--'],
             ['--','--','--','--','--','--','--','--'],
             ['wP','wP','wP','wP','wP','wP','wP','wP'],
             ['wR','wN','wB','wQ','wK','wB','wN','wR']]
@@ -55,27 +55,79 @@ class GameState():
                     if((color=="w" and self.white_to_move) or (color=="b" and not self.white_to_move)):
                         if peice_type=='R':
                             self.get_rook_moves(r,c,moves)
+                        if peice_type=='P':
+                            self.get_pawn_moves(r,c,moves)
+                        
             
 
         return moves
     
     def get_pawn_moves(self, row, col, moves):
         y=self.board[row][col]
+        if self.move_log!=[]:
+            last_move=self.move_log[-1]
+
+
         if y[0]=='b':
-            if y == self.board[][]
-            if row == 2:
-                for i in range(1,4,1):
+
+            # En passent Logic black
+            # if row==4 and last_move!=[]:
+            #     if self.board[row][col+1]=="wP" and last_move==Move((6,col+1),(4,col+1),self.board) and col+1<8:
+            #         moves.append(Move((row,col),(row+1,col+1),self.board))
+            #     if self.board[row][col-1]=="wP" and last_move==Move((6,col-1),(4,col-1),self.board) and col-1>=0:
+            #         moves.append(Move((row,col),(row+1,col-1),self.board))
+            if row == 1:
+                for i in range(2,4,1):
                     if self.board[i][col]!= '--':
                         break
                     else: 
                         moves.append(Move((row,col),(i,col),self.board))
-            if row != 2:
-                if self.board[row+1][col]== '--':
-                    moves.append(Move((row,col),(row+1,col),self.board))
-            if 
 
-        elif y[0]=='w':
+            if row != 1:
+                if self.board[row+1][col]== '--':
+                    moves.append(Move((row,col),(row+1,col),self.board))       
+
+            if col+1<=7:
+                l=self.board[row+1][col+1]
+                if l[0]=='w' :
+                    moves.append(Move((row,col),(row+1,col+1),self.board))
+
+            if col-1>=0:
+                l=self.board[row+1][col-1]
+                if l[0]=='w':
+                    moves.append(Move((row,col),(row+1,col-1),self.board))
+
+        if y[0]=='w':
+            # En passent logic white
+            # if row==3 and last_move!=[]:
+            #     if self.board[row][col+1]=="bP" and last_move==Move((1,col+1),(3,col+1),self.board) and col+1<8:
+            #         moves.append(Move((row,col),(row-1,col+1),self.board))
+            #     if self.board[row][col-1]=="bP" and last_move==Move((1,col-1),(3,col-1),self.board) and col-1>=0:
+            #         moves.append(Move((row,col),(row-1,col-1),self.board))
+            if row == 6:
+                for i in range(5,3,-1):
+                    if self.board[i][col]!= '--':
+                        break
+                    else: 
+                        moves.append(Move((row,col),(i,col),self.board))
+
+            if row != 6:
+                if self.board[row-1][col]== '--':
+                    moves.append(Move((row,col),(row-1,col),self.board))
+
             
+            if col+1<=7:
+                l=self.board[row-1][col+1]
+                if l[0]=='b' :
+                    moves.append(Move((row,col),(row-1,col+1),self.board))
+            
+            if col-1>=0:
+                l=self.board[row-1][col-1]
+                if l[0]=='b':
+                    moves.append(Move((row,col),(row-1,col-1),self.board))
+            
+
+        return moves
             
 
 

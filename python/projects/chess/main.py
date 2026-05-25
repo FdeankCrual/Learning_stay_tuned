@@ -26,10 +26,10 @@ class GameState():
     def __init__(self):
         self.board=[
             ['bR','bN','bB','bQ','bK','bB','bN','bR'],
-            ['bP','--','bP','bP','bP','bP','bP','bP'],
+            ['bP','bP','bP','bP','bP','bP','bP','bP'],
             ['--','--','--','--','--','--','--','--'],
             ['--','--','--','--','--','--','--','--'],
-            ['--','bP','--','--','--','--','--','--'],
+            ['--','--','--','--','--','--','--','--'],
             ['--','--','--','--','--','--','--','--'],
             ['wP','wP','wP','wP','wP','wP','wP','wP'],
             ['wR','wN','wB','wQ','wK','wB','wN','wR']]
@@ -57,16 +57,276 @@ class GameState():
                             self.get_rook_moves(r,c,moves)
                         if peice_type=='P':
                             self.get_pawn_moves(r,c,moves)
-                        
-            
-
+                        if peice_type=='B':
+                            self.get_bishop_moves(r,c,moves)
+                        if peice_type=='N':
+                            self.get_knight_moves(r,c,moves)
+                        if peice_type=='K':
+                            self.get_king_moves(r,c,moves)
+                        if peice_type=='Q':
+                            self.get_queen_moves(r,c,moves)
         return moves
     
+    def get_king_moves(self,row,col,moves):
+        y= self.board[row][col]
+        if 7>=row-1>=0 and 7>=col+1>=0:
+            x=self.board[row-1][col+1]
+            
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row-1,col+1),self.board))
+
+        if 7>=row-1>=0 and 7>=col-1>=0:
+            x=self.board[row-1][col-1]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row-1,col-1),self.board))
+        
+        if 7>=row+1>=0 and 7>=col+1>=0:
+            x=self.board[row+1][col+1]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row+1,col+1),self.board))
+
+        if 7>=row+1>=0 and 7>=col-1>=0:
+            x=self.board[row+1][col-1]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row+1,col-1),self.board))
+
+
+        
+        if 7>=col+1>=0:
+            x=self.board[row][col+1]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row,col+1),self.board))
+
+        if 7>=col-1>=0:
+            x=self.board[row][col-1]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row,col-1),self.board))
+        
+        if 7>=row+1>=0 and 7>=col>=0:
+            x=self.board[row+1][col]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row+1,col),self.board))
+
+        if 7>=row-1>=0 and 7>=col>=0:
+            x=self.board[row-1][col]
+
+            if x[0]!= y[0]:
+                moves.append(Move((row,col),(row-1,col),self.board))
+            
+        
+
+
+    def get_queen_moves(self,row,col,moves):
+        y= self.board[row][col]
+        j=row
+        for i in range(col+1, 8, 1):
+            j=j-1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+
+        j=row   
+        for i in range(col-1, -1, -1):
+            j=j+1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+                  
+            
+        
+        j=row
+        for i in range(col+1, 8, 1):
+            j=j+1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+             
+            
+        j=row   
+
+        for i in range(col-1, -1, -1):
+            j=j-1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+        
+        for i in range(col+1, 8, 1):
+            x=self.board[row][i]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(row,i),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(row,i),self.board))
+
+        for i in range(col-1, -1, -1):
+            x=self.board[row][i]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(row,i),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(row,i),self.board))
+
+        for i in range(row+1, 8, 1):
+            x=self.board[i][col]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(i,col),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(i,col),self.board))
+            
+            
+        for i in range(row-1, -1, -1):
+
+            x=self.board[i][col]
+            if x[0]== y[0]:
+                break
+            elif x[0]!= y[0] and x!='--':
+                moves.append(Move((row,col),(i,col),self.board))
+                break
+            else:
+                moves.append(Move((row,col),(i,col),self.board))
+
+    def get_knight_moves(self,row,col,moves):
+        y= self.board[row][col]
+        if 0<=row+2<=7:
+            if 0<=col-1<=7:
+                checker=self.board[row+2][col-1]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row+2,col-1),self.board))
+            if 0<=col+1<=7:
+                checker=self.board[row+2][col+1]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row+2,col+1),self.board))
+        if 0<=row-2<=7:
+            if 0<=col-1<=7:
+                checker=self.board[row-2][col-1]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row-2,col-1),self.board))
+            if 0<=col+1<=7:
+                checker=self.board[row-2][col+1]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row-2,col+1),self.board))
+        if 0<=col+2<=7:
+            if 0<=row-1<=7:
+                checker=self.board[row-1][col+2]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row-1,col+2),self.board))
+            if 0<=row+1<=7:
+                checker=self.board[row+1][col+2]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row+1,col+2),self.board))
+        if 0<=col-2<=7:
+            if 0<=row-1<=7:
+                checker=self.board[row-1][col-2]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row-1,col-2),self.board))
+            if 0<=row+1<=7:
+                checker=self.board[row+1][col-2]
+                if checker[0]!=y[0]:
+                    moves.append(Move((row,col),(row+1,col-2),self.board))
+        
+
+    def get_bishop_moves(self,row,col,moves):
+        y=self.board[row][col]
+        j=row
+        for i in range(col+1, 8, 1):
+            j=j-1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+
+        j=row   
+        for i in range(col-1, -1, -1):
+            j=j+1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+                  
+            
+        
+        j=row
+        for i in range(col+1, 8, 1):
+            j=j+1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+             
+            
+        j=row   
+
+        for i in range(col-1, -1, -1):
+            j=j-1
+            if 7>=j>=0:
+                x=self.board[j][i]
+                if x[0]== y[0]:
+                    break
+                elif x[0]!= y[0] and x!='--':
+                    moves.append(Move((row,col),(j,i),self.board))
+                    break
+                else:
+                    moves.append(Move((row,col),(j,i),self.board))
+                    
+            
+
+
     def get_pawn_moves(self, row, col, moves):
         y=self.board[row][col]
         if self.move_log!=[]:
             last_move=self.move_log[-1]
-
 
         if y[0]=='b':
 
@@ -240,14 +500,22 @@ def main():
                     sq_selected = (x,y)
                     player_clicked.append(sq_selected)
                     if len(player_clicked)==1:
-                        sq_selected=()
+                        if gs.board[player_clicked[0][0]][player_clicked[0][1]]=='--':
+                            player_clicked=[]
+                            sq_selected=()
                     elif len(player_clicked)==2:
-                        move = Move(player_clicked[0], player_clicked[1], gs.board)
-                        valid_moves= gs.get_all_possible_moves()
-                        if move in valid_moves:                      
-                            gs.make_move(move)
-                        player_clicked=[]
-                        sq_selected=()
+                        clr_1=gs.board[player_clicked[0][0]][player_clicked[0][1]]
+                        clr_2=gs.board[player_clicked[1][0]][player_clicked[1][1]]
+                        if clr_1[0]==clr_2[0]:
+                            player_clicked=[]
+                            sq_selected=()
+                        else:
+                            move = Move(player_clicked[0], player_clicked[1], gs.board)
+                            valid_moves= gs.get_all_possible_moves()
+                            if move in valid_moves:                      
+                                gs.make_move(move)
+                            player_clicked=[]
+                            sq_selected=()
 
         board(screen) # call the board function to create those boxes on screen so it looks like chess board
         draw_pieces(screen, gs.board)

@@ -36,9 +36,61 @@ class GameState():
         self.white_to_move=True
         self.move_log=[]
     
+    def undo_move(self):
+        if len(self.move_log)!=0:
+            move=self.move_log.pop()
+            self.board[move.start_row][move.start_col]=move.piece_to_move
+            self.board[move.end_row][move.end_col]=move.piece_captured
+
+            if move.is_enpassant:
+                if move.piece_to_move == 'wP':
+                    self.board[move.end_row + 1][move.end_col] = 'bP'
+                elif move.piece_to_move == 'bP':
+                    self.board[move.end_row - 1][move.end_col] = 'wP'
+                    
+            self.white_to_move = not self.white_to_move
+
+    def in_check(self):
+        y = False
+        for i in range(8):
+            for j in range(8):
+                if self.board[i][j]=='bK' and self.white_to_move == False:
+                    king_row = i
+                    king_col = j
+                elif self.board[i][j]=='wK' and self.white_to_move == True:
+                    king_row = i
+                    king_col = j
+        self.white_to_move = not self.white_to_move
+        psudo_moves=self.get_all_possible_moves()
+        self.white_to_move = not self.white_to_move
+        for move in psudo_moves:
+            if move.end_row == king_row and move.end_col == king_col:
+                y = True
+                break
+        return y
+    
+    def get_valid_moves(self):
+        moves = self.get_all_possible_moves()
+        for i in range(len(moves) - 1, -1, -1):
+            move = moves[i]
+            self.make_move(move)
+
+            if self.in_check():
+                moves.remove(move)
+
+            self.undo_move()
+        return moves
+
     def make_move(self,move):
         self.board[move.start_row][move.start_col]='--'
         self.board[move.end_row][move.end_col]=move.piece_to_move
+
+        if move.is_enpassant:
+            if move.piece_to_move == 'wP':
+                self.board[move.end_row + 1][move.end_col] = '--' # Clear Black Pawn
+            elif move.piece_to_move == 'bP':
+                self.board[move.end_row - 1][move.end_col] = '--' # Clear White Pawn
+        
         self.move_log.append(move)
         self.white_to_move = not self.white_to_move
 
@@ -118,9 +170,6 @@ class GameState():
 
             if x[0]!= y[0]:
                 moves.append(Move((row,col),(row-1,col),self.board))
-            
-        
-
 
     def get_queen_moves(self,row,col,moves):
         y= self.board[row][col]
@@ -148,9 +197,7 @@ class GameState():
                     moves.append(Move((row,col),(j,i),self.board))
                     break
                 else:
-                    moves.append(Move((row,col),(j,i),self.board))
-                  
-            
+                    moves.append(Move((row,col),(j,i),self.board))                   
         
         j=row
         for i in range(col+1, 8, 1):
@@ -261,7 +308,6 @@ class GameState():
                 if checker[0]!=y[0]:
                     moves.append(Move((row,col),(row+1,col-2),self.board))
         
-
     def get_bishop_moves(self,row,col,moves):
         y=self.board[row][col]
         j=row
@@ -320,22 +366,21 @@ class GameState():
                 else:
                     moves.append(Move((row,col),(j,i),self.board))
                     
-            
-
-
     def get_pawn_moves(self, row, col, moves):
         y=self.board[row][col]
-        if self.move_log!=[]:
-            last_move=self.move_log[-1]
 
         if y[0]=='b':
-
+            
             # En passent Logic black
-            # if row==4 and last_move!=[]:
-            #     if self.board[row][col+1]=="wP" and last_move==Move((6,col+1),(4,col+1),self.board) and col+1<8:
-            #         moves.append(Move((row,col),(row+1,col+1),self.board))
-            #     if self.board[row][col-1]=="wP" and last_move==Move((6,col-1),(4,col-1),self.board) and col-1>=0:
-            #         moves.append(Move((row,col),(row+1,col-1),self.board))
+            if row == 4 and len(self.move_log) > 0:
+                last_move = self.move_log[-1]
+                if col + 1 <= 7 and self.board[row][col+1] == 'wP':
+                    if last_move.end_row == row and last_move.end_col == col+1 and last_move.start_row == 1:
+                        moves.append(Move((row, col), (row+1, col+1), self.board, is_enpassant=True))
+                if 0<= col - 1  and self.board[row][col-1] == 'wP':
+                    if last_move.end_row == row and last_move.end_col == col-1 and last_move.start_row == 1:
+                        moves.append(Move((row, col), (row+1, col-1), self.board, is_enpassant=True))
+
             if row == 1:
                 for i in range(2,4,1):
                     if self.board[i][col]!= '--':
@@ -358,12 +403,17 @@ class GameState():
                     moves.append(Move((row,col),(row+1,col-1),self.board))
 
         if y[0]=='w':
+
             # En passent logic white
-            # if row==3 and last_move!=[]:
-            #     if self.board[row][col+1]=="bP" and last_move==Move((1,col+1),(3,col+1),self.board) and col+1<8:
-            #         moves.append(Move((row,col),(row-1,col+1),self.board))
-            #     if self.board[row][col-1]=="bP" and last_move==Move((1,col-1),(3,col-1),self.board) and col-1>=0:
-            #         moves.append(Move((row,col),(row-1,col-1),self.board))
+            if row == 3 and len(self.move_log) > 0:
+                last_move = self.move_log[-1]
+                if col + 1 <= 7 and self.board[row][col+1] == 'bP':
+                    if last_move.end_row == row and last_move.end_col == col+1 and last_move.start_row == 6:
+                        moves.append(Move((row, col), (row-1, col+1), self.board,is_enpassant=True))
+                if 0<= col - 1  and self.board[row][col-1] == 'bP':
+                    if last_move.end_row == row and last_move.end_col == col-1 and last_move.start_row == 6:
+                        moves.append(Move((row, col), (row-1, col-1), self.board,is_enpassant=True))
+
             if row == 6:
                 for i in range(5,3,-1):
                     if self.board[i][col]!= '--':
@@ -389,8 +439,6 @@ class GameState():
 
         return moves
             
-
-
     def get_rook_moves(self, row, col, moves):
         
         y=self.board[row][col]
@@ -438,13 +486,17 @@ class GameState():
 
 
 class Move():
-    def __init__(self, start_sq,end_sq, board):
+    def __init__(self, start_sq,end_sq, board,is_enpassant=False):
         self.start_row=start_sq[0]
         self.start_col=start_sq[1]
         self.end_row=end_sq[0]
         self.end_col=end_sq[1]
         self.piece_to_move=board[self.start_row][self.start_col]
         self.piece_captured=board[self.end_row][self.end_col]
+
+        self.is_enpassant = is_enpassant
+        if self.is_enpassant:
+            self.piece_captured = 'bP' if self.piece_to_move == 'wP' else 'wP'
 
     def __eq__(self, other):
         if isinstance(other, Move):
@@ -511,11 +563,17 @@ def main():
                             sq_selected=()
                         else:
                             move = Move(player_clicked[0], player_clicked[1], gs.board)
-                            valid_moves= gs.get_all_possible_moves()
+                            valid_moves= gs.get_valid_moves()
                             if move in valid_moves:                      
                                 gs.make_move(move)
                             player_clicked=[]
                             sq_selected=()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_z: # Check if user pressed 'z'
+                    gs.undo_move() # Roll back the last move
+                    # Force-wiping tracking variables ensures selections clear on undo
+                    player_clicked = []
+                    sq_selected = ()
 
         board(screen) # call the board function to create those boxes on screen so it looks like chess board
         draw_pieces(screen, gs.board)
